@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>D2C Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.kpis {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.card h3 {
+    color: gray;
+}
+
+.card p {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.charts {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.chart-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #222;
+    color: white;
+}
+
+.chart-container{
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
+
+canvas{
+    max-height: 400px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>D2C Brand Dashboard</h1>
+
+<div class="kpis">
+
+<div class="card">
+<h3>Total Revenue</h3>
+<p>₹183,356.86</p>
+</div>
+
+<div class="card">
+<h3>Total Orders</h3>
+<p>51</p>
+</div>
+
+<div class="card">
+<h3>Average Order Value</h3>
+<p>₹3,595.23</p>
+</div>
+
+<div class="card">
+<h3>Total Customers</h3>
+<p>26</p>
+</div>
+
+</div>
+
+<div class="charts">
+
+<div class="chart-card">
+<h3>Revenue by Category</h3>
+<div class="chart-container">
+    <canvas id="categoryChart"></canvas>
+</div>
+</div>
+
+<div class="chart-card">
+<h3>Revenue by Channel</h3>
+<div class="chart-container">
+    <canvas id="channelChart"></canvas>
+</div>
+</div>
+
+</div>
+
+<br><br>
+
+<div class="chart-card">
+
+<h3>Top Products</h3>
+
+<table>
+
+<thead>
+<tr>
+<th>Product</th>
+<th>Revenue</th>
+<th>Orders</th>
+</tr>
+</thead>
+
+<tbody id="productTable"></tbody>
+
+</table>
+
+</div>
+
+<script>
+
+const categoryData = [{"category":"Haircare","revenue":38013.82},{"category":"Makeup","revenue":15283.39},{"category":"Skincare","revenue":64722.59},{"category":"Wellness","revenue":65337.06}];
+
+const channelData = [{"channel":"Amazon","revenue":14004.96},{"channel":"App","revenue":78385.95},{"channel":"Instagram","revenue":44409.55},{"channel":"Website","revenue":25920.24},{"channel":"WhatsApp","revenue":20636.16}];
+
+const productData = [{"product_name":"Vitamin C Serum","revenue":30730.35,"orders":6},{"product_name":"Collagen Supplement","revenue":20429.18,"orders":5},{"product_name":"Conditioner","revenue":14298.75,"orders":3},{"product_name":"Ashwagandha","revenue":14100.0,"orders":3},{"product_name":"Night Cream","revenue":13540.8,"orders":3},{"product_name":"Moisturizer","revenue":13172.6,"orders":3},{"product_name":"Hair Mask","revenue":12145.2,"orders":4},{"product_name":"Vitamin D3","revenue":10751.58,"orders":3},{"product_name":"Eyeliner","revenue":10709.26,"orders":2},{"product_name":"Probiotic Blend","revenue":10605.76,"orders":2}];
+
+// Category Chart
+
+
+new Chart(
+    document.getElementById('categoryChart'),
+    {
+        type: 'bar',
+        data: {
+            labels: categoryData.map(x => x.category),
+            datasets: [{
+                label: 'Revenue',
+                data: categoryData.map(x => x.revenue)
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    }
+);
+
+
+// Channel Chart
+
+new Chart(
+document.getElementById('channelChart'),
+{
+type:'pie',
+data:{
+labels: channelData.map(x => x.channel),
+datasets:[{
+data: channelData.map(x => x.revenue)
+}]
+}
+}
+);
+
+// Product Table
+
+let rows = "";
+
+console.log(productData);
+productData.forEach(p => {
+rows += `
+<tr>
+<td>${p.product_name}</td>
+<td>₹${Number(p.revenue).toLocaleString()}</td>
+<td>${p.orders}</td>
+</tr>
+`;
+});
+
+document.getElementById("productTable").innerHTML = rows;
+
+</script>
+
+</body>
+</html>
